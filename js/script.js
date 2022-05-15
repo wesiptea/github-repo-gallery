@@ -145,11 +145,11 @@ filterInput.addEventListener("input", function (e) {
   // Equal to what is entered in event/input form
   const repos = document.querySelectorAll(".repo");
   // This selects all repos
-  const searchLowerText = searchText.toLowercase();
+  const searchLowerText = searchText.toLowerCase();
   // This converts all text to lowercase in the form
 
   for (repo of repos) {
-    const repoLowerText= repo.innerText.toLowercase();
+    const repoLowerText= repo.innerText.toLowerCase();
     // This keeps all text in lowercase during looping
 
     if (repoLowerText.includes(searchLowerText)) {
