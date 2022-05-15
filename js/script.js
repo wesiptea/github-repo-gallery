@@ -1,4 +1,4 @@
-// global variables
+// Global variables
 const overview = document.querySelector(".overview");
 // overview element will inc profile info
 
@@ -11,7 +11,7 @@ const repos = document.querySelector(".repos");
 const repoData = document.querySelector(".repo-data");
 
 
-// fetch profile information using an API
+// Fetch profile information using an API
 const profileInfo = async function () {
     const myInfoFetch = await fetch (`https://api.github.com/users/${username}`);
     const data = await myInfoFetch.json();
@@ -20,7 +20,8 @@ const profileInfo = async function () {
 };
 profileInfo();
 
-// create a div for bio info
+
+// Create a div for bio info
 const displayUserData = function (data) {
     const div = document.createElement("div");
     div.classList.add("user-info");
@@ -39,7 +40,8 @@ const displayUserData = function (data) {
   repoAPI();
 }
 
-// fetch the repos using an API
+
+// Fetch the repos using an API
 const repoAPI = async function () {
   const repoFetch = await fetch (`https://api.github.com/users/${username}/repos?sort=updated&per_page=100`);
   // Endpoints for this API are: "sort" by most recently "updated" and "100" repos "per_page" - these endpoints were found in document for API
@@ -50,7 +52,8 @@ const repoAPI = async function () {
   // Calling the function created to display repo info; passing the JSON response data as the argument
 };
 
-// display repos onscreen
+
+// Display repos onscreen
 const displayRepo = function (repos) {
   for (const data of repos) {
     const listItem = document.createElement("li");
@@ -61,7 +64,8 @@ const displayRepo = function (repos) {
   }
 };
 
-// turning each repo name into a click event
+
+// Turn each repo name into a click event
 repoList.addEventListener("click", function(e) {
   if (e.target.matches("h3")) {
     const repoName = e.target.innerText;
@@ -70,28 +74,37 @@ repoList.addEventListener("click", function(e) {
   } 
 });
 
-// this async function grabs specific info about each repos
+
+// This async function grabs specific info about each repo
 const specificRepoInfo = async function (repoName) {
+
   const fetchRepo = await fetch (`https://api.github.com/repos/${username}/${repoName}`);
-  // Ask about the endpoint data; where was this found? I was unsure of where this was shown, except that it is also a variable named in the async function above.
+    // Ask about the endpoint data; where was this found? I was unsure of where this was shown, except that it is also a variable named in the async function above.
   const repoInfo = await fetchRepo.json();
   console.log(repoInfo);
 
+
+  // Grab languages from API
   const fetchLanguages = await fetch (repoInfo.languages_url);
-  // I had to look up the code in above parenthesis - I don't recall this format for a fetch sequence.
+    // I had to look up the code in above parenthesis - I don't recall this format for a fetch sequence.
   const languageData = await fetchLanguages.json();
   // console.log(languageData);
 
-  // creating a language list
+  // Create a language list
   const languages = [];
-  // empty array used to add languages to list
+    // Empty array is used to add languages to list
   for (const language in languageData) {
     languages.push(language);
-    console.log(languages);
+    // console.log(languages);
   }
+
+  displayRepoInfo(repoInfo, languages);
+  // Calling function to display specific repo info - passing the repoInfo object and languages array
 };
 
- const displayRepoInfo = function (repoInfo, languages) {
+
+// Gather specific info about repos
+const displayRepoInfo = function (repoInfo, languages) {
   repoData.innerHTML = "";
 
   const div = document.createElement("div")
@@ -106,4 +119,4 @@ const specificRepoInfo = async function (repoName) {
   repoData.append(div);
   repoData.classList.remove("hide");
   repos.classList.add("hide");
- };
+};
