@@ -10,6 +10,10 @@ const repos = document.querySelector(".repos");
 
 const repoData = document.querySelector(".repo-data");
 
+const backToGallery = document.querySelector(".view-repos");
+
+const filterInput = document.querySelector(".filter-repos");
+
 
 // Fetch profile information using an API
 const profileInfo = async function () {
@@ -53,8 +57,11 @@ const repoAPI = async function () {
 };
 
 
-// Display repos onscreen
+// Display repos and input element (form) onscreen
 const displayRepo = function (repos) {
+
+  filterInput.classList.remove("hide");
+
   for (const data of repos) {
     const listItem = document.createElement("li");
     listItem.classList.add("repo");
@@ -62,6 +69,7 @@ const displayRepo = function (repos) {
     repoList.append(listItem);
     // The above line of code adds (appends) elements to the list of repos onscreen using the newly created html list (repoList - global var)
   }
+
 };
 
 
@@ -84,18 +92,18 @@ const specificRepoInfo = async function (repoName) {
   console.log(repoInfo);
 
 
-  // Grab languages from API
+  // Grab languages from API address above
   const fetchLanguages = await fetch (repoInfo.languages_url);
-    // I had to look up the code in above parenthesis - I don't recall this format for a fetch sequence.
+  // I had to look up the code in above parenthesis - I don't recall this format for a fetch sequence.
   const languageData = await fetchLanguages.json();
   // console.log(languageData);
 
   // Create a language list
   const languages = [];
-    // Empty array is used to add languages to list
+  // Empty array is used to capture languages and add to a list
   for (const language in languageData) {
     languages.push(language);
-    // console.log(languages);
+  // console.log(languages);
   }
 
   displayRepoInfo(repoInfo, languages);
@@ -103,7 +111,7 @@ const specificRepoInfo = async function (repoName) {
 };
 
 
-// Gather specific info about repos
+// Gather specific info about repos and make them visible
 const displayRepoInfo = function (repoInfo, languages) {
   repoData.innerHTML = "";
 
@@ -119,4 +127,40 @@ const displayRepoInfo = function (repoInfo, languages) {
   repoData.append(div);
   repoData.classList.remove("hide");
   repos.classList.add("hide");
+  backToGallery.classList.remove("hide");
 };
+
+
+// Click event for Back to Gallery button
+backToGallery.addEventListener("click", function () {
+  repos.classList.remove("hide");
+  repoData.classList.add("hide");
+  backToGallery.classList.add("hide");
+});
+
+// Add an Input Event to the Search Box; Dynamic search
+filterInput.addEventListener("input", function (e) {
+  
+  const searchText = e.target.value;
+  // Equal to what is entered in event/input form
+
+  const allRepos = document.querySelectorAll(".repo");
+  // Note: This selects all repos - diff named than solution due to global var name above
+
+  const searchLowerText = searchText.toLowercase();
+  // This converts all text to lowercase in the form
+
+  for (repo of allRepos) {
+    const repoLowerText= repo.innerText.toLowercase();
+    // This keeps all text in lowercase during looping
+
+    if (repoLowerText.includes(searchLowerText)) {
+      repo.classList.remove("hide");
+      // Show repos that include searched text
+    } else {
+      repo.classList.add("hide");
+      // Hide repos without searched text
+    }
+  };
+
+});
