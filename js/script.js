@@ -6,7 +6,7 @@ const username = "wesiptea";
 
 const repoList = document.querySelector(".repo-list");
 
-const repos = document.querySelector(".repos");
+const reposContainer = document.querySelector(".repos");
 
 const repoData = document.querySelector(".repo-data");
 
@@ -126,14 +126,14 @@ const displayRepoInfo = function (repoInfo, languages) {
 
   repoData.append(div);
   repoData.classList.remove("hide");
-  repos.classList.add("hide");
+  reposContainer.classList.add("hide");
   backToGallery.classList.remove("hide");
 };
 
 
 // Click event for Back to Gallery button
 backToGallery.addEventListener("click", function () {
-  repos.classList.remove("hide");
+  reposContainer.classList.remove("hide");
   repoData.classList.add("hide");
   backToGallery.classList.add("hide");
 });
@@ -143,14 +143,12 @@ filterInput.addEventListener("input", function (e) {
   
   const searchText = e.target.value;
   // Equal to what is entered in event/input form
-
-  const allRepos = document.querySelectorAll(".repo");
-  // Note: This selects all repos - diff named than solution due to global var name above
-
+  const repos = document.querySelectorAll(".repo");
+  // This selects all repos
   const searchLowerText = searchText.toLowercase();
   // This converts all text to lowercase in the form
 
-  for (repo of allRepos) {
+  for (repo of repos) {
     const repoLowerText= repo.innerText.toLowercase();
     // This keeps all text in lowercase during looping
 
@@ -161,6 +159,6 @@ filterInput.addEventListener("input", function (e) {
       repo.classList.add("hide");
       // Hide repos without searched text
     }
-  };
+  }
 
 });
